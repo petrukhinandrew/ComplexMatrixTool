@@ -31,9 +31,4 @@ fun main () {
 //    print(t)
     val s = Complex("+5+  2i+ 4 - 6")
     print(s)
-    // how to split line by + and - and transform it to list of pair <char, string> where char stores - or + for further handling
-    /*
-    строку без пробелов можно проверять линейно на пустые элементы между знаками просто split и смотреть на размер каждого куска
-
-     */
 }
