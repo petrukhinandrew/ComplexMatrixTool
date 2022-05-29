@@ -1,15 +1,26 @@
-data class ComplexMatrix(val stroke: Char = '*', val height: Int, val width: Int, val data: List<MutableList<Complex>>) {
+data class ComplexMatrix(
+    val stroke: Char = '*',
+    val height: Int,
+    val width: Int,
+    val data: List<MutableList<Complex>>
+) {
     constructor(height: Int, width: Int) : this(
         '*', height, width,
         List<MutableList<Complex>>(height) { MutableList<Complex>(width) { Complex(0, 0) } }
     )
 
+    constructor(data: List<MutableList<Complex>>) : this(
+        '*', data.size, data[0].size, data
+    )
+
     constructor(other: ComplexMatrix) : this(
         other.stroke, other.height, other.width, other.data.copy()
     )
+
     init {
         require(initialValuesValidation())
     }
+
     /*
      * операции с матрицами
      */
