@@ -19,16 +19,7 @@
 Для этого будем пользоваться generic'ами
 
  */
-
+fun <T> List<MutableList<T>>.copy() = this.map{ it.toMutableList() }
 fun main () {
-//    val m = ComplexMatrix('*', 3, 3, listOf(
-//        listOf(Complex(1,2), Complex(3, 4), Complex(5,6)),
-//        listOf(Complex(1,20), Complex(3, 4), Complex(5,6)),
-//        listOf(Complex(1,2), Complex(35, 4), Complex(50,60))
-//    ))
-//    m.drawMatrix()
-//    val t = Complex("+2i - + 3+ 0- 2i + 6i")
-//    print(t)
-    val s = Complex("+5+  2i+ 4 - 6")
-    print(s)
+
 }

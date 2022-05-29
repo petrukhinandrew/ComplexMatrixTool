@@ -22,6 +22,7 @@ data class ParsedComplexPart(var str : String) {
 }
 
 data class Complex(var Re: Int, var Im: Int) {
+    constructor(complexNumber: Complex) : this(complexNumber.Re, complexNumber.Im)
     constructor(complexString: String) : this(0, 0) {
         val complexParts = parseComplexParts(complexString)
         complexParts.forEach {part ->
@@ -64,7 +65,7 @@ data class Complex(var Re: Int, var Im: Int) {
     }
 
     operator fun minus(other: Complex) : Complex {
-        return Complex(Re - other.Re, Im - other.Im)
+        return Complex(this + (-other))
     }
 
     operator fun times(other: Complex) : Complex {
@@ -82,8 +83,7 @@ operator fun Complex.plusAssign(other: Complex) {
 }
 
 operator fun Complex.minusAssign(other: Complex) {
-    Re -= other.Re
-    Im -= other.Im
+    this += -other
 }
 
 operator fun Complex.timesAssign(other: Complex) {
