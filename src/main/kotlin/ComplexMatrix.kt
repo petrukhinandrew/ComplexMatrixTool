@@ -1,4 +1,4 @@
-data class ComplexMatrix(val stroke: Char, val height: Int, val width: Int, val data: List<MutableList<Complex>>) {
+data class ComplexMatrix(val stroke: Char = '*', val height: Int, val width: Int, val data: List<MutableList<Complex>>) {
     constructor(height: Int, width: Int) : this(
         '*', height, width,
         List<MutableList<Complex>>(height) { MutableList<Complex>(width) { Complex(0, 0) } }
@@ -7,12 +7,15 @@ data class ComplexMatrix(val stroke: Char, val height: Int, val width: Int, val 
     constructor(other: ComplexMatrix) : this(
         other.stroke, other.height, other.width, other.data.copy()
     )
-
+    init {
+        require(initialValuesValidation())
+    }
     /*
      * операции с матрицами
      */
-    private fun sumValidation(other: ComplexMatrix): Boolean = (height == other.height && width == other.width)
-    private fun multValidation(other: ComplexMatrix): Boolean = (width == other.height)
+    private fun initialValuesValidation(): Boolean = (height == data.size && data.all { it.size == width })
+    private fun plusValidation(other: ComplexMatrix): Boolean = (height == other.height && width == other.width)
+    private fun timesValidation(other: ComplexMatrix): Boolean = (width == other.height)
 
     operator fun unaryMinus(): ComplexMatrix {
         val minusMatrix = ComplexMatrix(this)
@@ -23,26 +26,26 @@ data class ComplexMatrix(val stroke: Char, val height: Int, val width: Int, val 
     }
 
     operator fun plus(other: ComplexMatrix): ComplexMatrix {
-        require(sumValidation(other))
+        require(plusValidation(other))
         val newMatrix = ComplexMatrix(this)
         for (i in 0 until height)
             for (j in 0 until width)
                 newMatrix.data[i][j] = this[i][j] + other[i][j]
         return newMatrix
     }
+
+    operator fun minus(other: ComplexMatrix): ComplexMatrix = this + (-other)
+
     operator fun times(other: ComplexMatrix): ComplexMatrix {
-        require(multValidation(other))
+        require(timesValidation(other))
         val newMatrix = ComplexMatrix(height, other.width)
         for (i in 0 until height)
-            for (j in 0 until width) {
-                var currentCell = Complex(0, 0)
+            for (j in 0 until width)
                 for (c in 0 until width)
-                    currentCell = currentCell + data[i][c] * other.data[c][j]
-                newMatrix.data[i][j] = currentCell
-            }
+                    newMatrix.data[i][j] += data[i][c] * other.data[c][j]
         return newMatrix
     }
-    operator fun minus(other: ComplexMatrix): ComplexMatrix = this + (-other)
+
     /*
      * теперь научимся печатать матрицу
      * у data class в идеальном мире нет каких-то методов, которые обрабатывают данные

@@ -21,5 +21,10 @@
  */
 fun <T> List<MutableList<T>>.copy() = this.map{ it.toMutableList() }
 fun main () {
-
+    var matrix = ComplexMatrix('*', 2,2,
+        listOf(
+            mutableListOf(Complex("1 + 2i"), Complex("3 + 4i")),
+            mutableListOf(Complex("0"), Complex(5,5))
+        )
+    )
 }

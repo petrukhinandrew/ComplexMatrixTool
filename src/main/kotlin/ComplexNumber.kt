@@ -77,20 +77,6 @@ data class Complex(var Re: Int, var Im: Int) {
     }
 }
 
-operator fun Complex.plusAssign(other: Complex) {
-    Re += other.Re
-    Im += other.Im
-}
-
-operator fun Complex.minusAssign(other: Complex) {
-    this += -other
-}
-
-operator fun Complex.timesAssign(other: Complex) {
-    Re = Re * other.Re - Im * other.Im
-    Im = Re * other.Im + Im * other.Re
-}
-
 fun Complex.absVal() : Double = sqrt((Re * Re + Im * Im).toDouble())
 
 fun abs(complexNumber : Complex) : Double {
