@@ -1,31 +1,10 @@
 import kotlin.math.sqrt
 
-data class ParsedComplexPart(var str : String) {
-
-    var sign = 1
-    var isImaginary = false
-    var value = 0
-
-    init {
-        if (str.find { it == '-'} != null)
-            sign = -1
-        str = str.replace("-+".toRegex(), "")
-        if (str.find { it == 'i' } != null)
-            isImaginary = true
-        str = str.replace("i", "")
-        value = str.toInt() * sign
-    }
-
-    override fun toString(): String {
-        return value.toString() + if (isImaginary) "i" else ""
-    }
-}
-
-data class Complex(var Re: Int, var Im: Int) {
+data class Complex(var Re: Int = 0, var Im: Int = 0) {
     constructor(complexNumber: Complex) : this(complexNumber.Re, complexNumber.Im)
     constructor(complexString: String) : this(0, 0) {
         val complexParts = parseComplexParts(complexString)
-        complexParts.forEach {part ->
+        complexParts.forEach { part ->
             if (part.isImaginary)
                 Im += part.value
             else
@@ -33,26 +12,27 @@ data class Complex(var Re: Int, var Im: Int) {
         }
     }
 
-    private fun validateComplexString(expectedComplex: String) : Boolean  = "[+-][-+]|\\di\\d|ii|i\\di".toRegex().find(expectedComplex) == null
+    private fun complexStringValidation(expectedComplex: String): Boolean =
+        "[+-][-+]|\\di\\d|ii|i\\di|i\\d".toRegex().find(expectedComplex) == null
 
-    private fun parseComplexParts(expectedComplex : String) : List<ParsedComplexPart> {
+    private fun parseComplexParts(expectedComplex: String): List<ParsedComplexNumberPart> { // TODO(make +i == +1i)
         val trimmedExpectedComplex = expectedComplex.replace("\\s".toRegex(), "")
-        if (!validateComplexString(trimmedExpectedComplex))
+        if (!complexStringValidation(trimmedExpectedComplex))
             throw Exception("Given $trimmedExpectedComplex is not valid")
         val tmpComplexString = StringBuilder()
-        val result = mutableListOf<ParsedComplexPart>()
+        val result = mutableListOf<ParsedComplexNumberPart>()
         trimmedExpectedComplex.forEach {
             when {
                 it in listOf('+', '-') -> {
                     if (tmpComplexString.isNotEmpty())
-                        result.add(ParsedComplexPart(tmpComplexString.toString()))
+                        result.add(ParsedComplexNumberPart(tmpComplexString.toString()))
                     tmpComplexString.clear()
                     tmpComplexString.append(it)
                 }
                 it.isDigit() || it == 'i' -> tmpComplexString.append(it)
             }
         }
-        result.add(ParsedComplexPart(tmpComplexString.toString()))
+        result.add(ParsedComplexNumberPart(tmpComplexString.toString()))
         return result
     }
 
@@ -60,15 +40,15 @@ data class Complex(var Re: Int, var Im: Int) {
         return Complex(-Re, -Im)
     }
 
-    operator fun plus(other: Complex) : Complex {
+    operator fun plus(other: Complex): Complex {
         return Complex(Re + other.Re, Im + other.Im)
     }
 
-    operator fun minus(other: Complex) : Complex {
+    operator fun minus(other: Complex): Complex {
         return Complex(this + (-other))
     }
 
-    operator fun times(other: Complex) : Complex {
+    operator fun times(other: Complex): Complex {
         return Complex(Re * other.Re - Im * other.Im, Re * other.Im + Im * other.Re)
     }
 
@@ -77,8 +57,8 @@ data class Complex(var Re: Int, var Im: Int) {
     }
 }
 
-fun Complex.absVal() : Double = sqrt((Re * Re + Im * Im).toDouble())
+fun Complex.absVal(): Double = sqrt((Re * Re + Im * Im).toDouble())
 
-fun abs(complexNumber : Complex) : Double {
+fun abs(complexNumber: Complex): Double {
     return complexNumber.absVal()
 }

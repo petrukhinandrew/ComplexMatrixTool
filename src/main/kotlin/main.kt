@@ -20,11 +20,58 @@
 
  */
 fun <T> List<MutableList<T>>.copy() = this.map{ it.toMutableList() }
+
+/*
+ * UI interface:
+ *      $i, i: Int - matrix
+ *      +, -, * prints matrix
+ *      $i +=, -=, *= $j updates matrix at $i with $j
+ *      we can add .T() for matrix transposing
+ *      print $i to print that is stored in $i
+ *      $i = s, s: String for saving new matrix. must be checked whether something is already saved in $i
+ *      exit to close the app
+ *      help
+ */
+
+// now the task is to implement this interface
+const val helpMessage = "HELP MESSAGE MUST BE SPECIFIED"
+fun handleCommand(storage: MutableMap<String, ComplexMatrix>, command: List<String>): Boolean {
+    when {
+        command[0] in listOf("print", "exit", "help") -> {
+            when(command[0]) {
+                "exit" -> return false
+                "help" -> {
+                    println(helpMessage)
+                }
+                "print" -> {
+                    if (command.size == 1) {
+                        println("No matrix specified to print")
+                        return true
+                    }
+                    if (command[1] in storage)
+                        println(storage[command[1]])
+                    else
+                        println("No matrix saved with index ${command[1]}")
+                }
+            }
+        }
+        command[0].first() == '$' -> {
+
+        }
+        else -> {
+            println("COMMAND NOT FOUND")
+        }
+    }
+    return true
+}
+
+
 fun main () {
-    var matrix = ComplexMatrix('*', 2,2,
-        listOf(
-            mutableListOf(Complex("1 + 2i"), Complex("3 + 4i")),
-            mutableListOf(Complex("0"), Complex(5,5))
-        )
-    )
+//    val storage: MutableMap<String, ComplexMatrix> = mutableMapOf()
+//    var nextCommand = readLine()!!.split(' ').filter{ it.isNotEmpty() }
+//    while (handleCommand(storage, nextCommand)) {
+//        nextCommand = readLine()!!.split(' ').filter { it.isNotEmpty() }
+//    }
+    val m = ComplexMatrix("1,2,3;4,5,6")
+    print(m)
 }

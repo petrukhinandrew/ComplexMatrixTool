@@ -17,6 +17,22 @@ data class ComplexMatrix(
         other.stroke, other.height, other.width, other.data.copy()
     )
 
+    private fun matrixStringValidation(matrix: String, width: Int): Boolean = matrix.split(';').
+        all { it.split(',').size == width }
+
+    constructor(matrix: String) : this(
+        matrix.split(';').size,
+        matrix.split(';')[0].split(',').size
+    ) {
+        matrix.trim { it in "[],; " }
+        require(matrixStringValidation(matrix, width))
+        matrix.split(';').forEachIndexed { i, row ->
+            row.split(',').forEachIndexed { j, cell ->
+                data[i][j] = Complex(cell)
+            }
+        }
+    }
+
     init {
         require(initialValuesValidation())
     }
