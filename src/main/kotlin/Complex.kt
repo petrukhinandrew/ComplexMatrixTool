@@ -15,7 +15,7 @@ data class Complex(var Re: Int = 0, var Im: Int = 0) {
     private fun complexStringValidation(expectedComplex: String): Boolean =
         "[+-][-+]|\\di\\d|ii|i\\di|i\\d".toRegex().find(expectedComplex) == null
 
-    private fun parseComplexParts(expectedComplex: String): List<ParsedComplexNumberPart> { // TODO(make +i == +1i)
+    private fun parseComplexParts(expectedComplex: String): List<ParsedComplexNumberPart> {
         val trimmedExpectedComplex = expectedComplex.replace("\\s".toRegex(), "")
         if (!complexStringValidation(trimmedExpectedComplex))
             throw Exception("Given $trimmedExpectedComplex is not valid")
