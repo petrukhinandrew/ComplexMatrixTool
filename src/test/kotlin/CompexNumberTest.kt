@@ -63,4 +63,16 @@ internal class ComplexNumberTest {
         assertEquals(compl * Complex(2, 0), Complex(2, 2))
         assertEquals(compl * Complex(0, 2), Complex(-2, 2))
     }
+
+    @Test
+    fun testOperatorsWithInt() {
+        assertEquals(Complex(1,2) + 5, Complex(6, 2))
+        assertEquals(5 + Complex(1,2) + 5, Complex(11, 2))
+
+        assertEquals(Complex(1,2) * 5, Complex(5, 10))
+        assertEquals(Complex() * 100500, Complex())
+
+        assertEquals(Complex() - 10, Complex(-10, 0))
+        assertEquals(10 - Complex(), Complex(10, 0))
+    }
 }

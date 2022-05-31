@@ -17,8 +17,7 @@ data class ComplexMatrix(
         other.stroke, other.height, other.width, other.data.copy()
     )
 
-    private fun matrixStringValidation(matrix: String): Boolean = matrix.split(';').
-        all { it.split(',').size == width }
+    private fun matrixStringValidation(matrix: String): Boolean = matrix.split(';').all { it.split(',').size == width }
 
     constructor(matrix: String) : this(
         matrix.split(';').size,
@@ -149,3 +148,7 @@ data class ComplexMatrix(
 }
 
 operator fun ComplexMatrix.get(i: Int) = data[i]
+operator fun Int.times(other: ComplexMatrix): ComplexMatrix =
+    ComplexMatrix(other.data.map { row -> row.map { cell -> cell * this }.toMutableList() })
+
+operator fun ComplexMatrix.times(other: Int): ComplexMatrix = other * this
