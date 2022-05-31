@@ -86,17 +86,38 @@ internal class ComplexMatrixTest {
 
     @Test
     fun testNoCopyOnAssignment() {
-
+        val matrix = ComplexMatrix("1,2i,3i;4,5i,6i")
+        val matrixCopy = ComplexMatrix(matrix)
+        assertEquals(matrix, matrixCopy)
+        matrix[0][0] = Complex(2,2)
+        assertNotEquals(matrix[0][0], matrixCopy[0][0])
+        matrixCopy[1][1] = Complex()
+        assertNotEquals(matrix[1][1], matrixCopy[1][1])
+        assertNotEquals(matrix, matrixCopy)
     }
 
     @Test
     fun testOperatorPlus() {
-
+        var m = ComplexMatrix("1,2i,3;4,5,6i")
+        assertEquals(m + ComplexMatrix("1i,2,3i;4i,5i,6"), ComplexMatrix("1 + 1i, 2 + 2i, 3 + 3i; 4 + 4i, 5 + 5i, 6 + 6i"))
+        m += m
+        assertEquals(m, ComplexMatrix("2,4i,6;8,10,12i"))
+        assertFails { m + ComplexMatrix("1,1;2,2") }
+        assertFails { m + ComplexMatrix("1,1,1;2,2,2,2") }
     }
 
     @Test
     fun testOperatorTimes() {
-
+        var e = ComplexMatrix("1,0,0;0,1,0;0,0,1")
+        assertEquals(e * ComplexMatrix("1,2,3;4,5,6;7,8,9"), ComplexMatrix("1,2,3;4,5,6;7,8,9"))
+        assertEquals(e * ComplexMatrix("1,2,3;4,5,6;7,8,9") * e, ComplexMatrix("1,2,3;4,5,6;7,8,9"))
+        assertEquals(e * e, e)
+        e = ComplexMatrix("1,1;0,1")
+        e *= ComplexMatrix("2;3")
+        assertEquals(e, ComplexMatrix("5;3"))
+        assertFails { e * ComplexMatrix("5; 6") }
+        e = ComplexMatrix("1,2,3;4,5,6")
+        assertFails { e * ComplexMatrix("1;2") }
     }
 
 }

@@ -17,7 +17,7 @@ data class ComplexMatrix(
         other.stroke, other.height, other.width, other.data.copy()
     )
 
-    private fun matrixStringValidation(matrix: String, width: Int): Boolean = matrix.split(';').
+    private fun matrixStringValidation(matrix: String): Boolean = matrix.split(';').
         all { it.split(',').size == width }
 
     constructor(matrix: String) : this(
@@ -25,7 +25,7 @@ data class ComplexMatrix(
         matrix.split(';')[0].split(',').size
     ) {
         matrix.trim { it in "[],; " }
-        require(matrixStringValidation(matrix, width))
+        require(matrixStringValidation(matrix))
         matrix.split(';').forEachIndexed { i, row ->
             row.split(',').forEachIndexed { j, cell ->
                 data[i][j] = Complex(cell)
@@ -67,7 +67,7 @@ data class ComplexMatrix(
         require(timesValidation(other))
         val newMatrix = ComplexMatrix(height, other.width)
         for (i in 0 until height)
-            for (j in 0 until width)
+            for (j in 0 until other.width)
                 for (c in 0 until width)
                     newMatrix.data[i][j] += data[i][c] * other.data[c][j]
         return newMatrix
